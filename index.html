@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Live Score - IPL 2025 Updates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        nav {
+            background-color: #2563eb;
+            padding: 0.5rem;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin: 0 1rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            background-color: #3b82f6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .live-matches {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .match-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .teams {
+            flex: 2;
+        }
+        
+        .score {
+            flex: 1;
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .status {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        h2 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+        
+        .ipl-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .ipl-highlight {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        
+        .ipl-highlight img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+        
+        footer {
+            background-color: #1e3a8a;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+        
+        .footer-links a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #a5b4fc;
+        }
+
+        .refresh-info {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .team-logo {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .live-status {
+            color: #dc2626;
+            animation: blink 1.5s infinite;
+        }
+
+        .upcoming-status {
+            color: #2563eb;
+        }
+
+        .completed-status {
+            color: #16a34a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Cricket Live Score</h1>
+        <p>Get real-time updates of all cricket matches</p>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">IPL 2025</a></li>
+            <li><a href="#">Live Cricket</a></li>
+            <li><a href="#">Schedule</a></li>
+            <li><a href="#">News</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <section class="live-matches">
+            <div class="refresh-info">
+                Auto-refreshing in <span id="countdown">30</span> seconds | 
+                <a href="#" id="manualRefresh">Refresh Now</a>
+                <span id="apiStatus"></span>
+            </div>
+            <h2>Live Matches</h2>
+            <div id="matchesContainer">
+                <div class="match-card">
+                    <div class="teams">
+                        <p>Loading matches...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="ipl-section">
+            <h2>IPL 2025</h2>
+            <div id="iplContainer">
+                <div class="ipl-highlight">
+                    <img src="https://via.placeholder.com/80" alt="IPL">
+                    <div>
+                        <h3>Loading IPL data...</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Advertise</a>
+        </div>
+        <p>© 2025 Cricket Live Score. All Rights Reserved.</p>
+        <p class="copyright">Data provided by CricAPI | API hits used: <span id="apiHits">0</span>/100 (daily limit)</p>
+    </footer>
+
+    <script>
+        // Configuration
+        const API_KEY = 'ecfdeb92-1709-4159-b370-705204e86795';
+        const REFRESH_INTERVAL = 30000; // 30 seconds
+        let refreshTimer;
+        let countdownTimer;
+        let isRefreshing = false;
+
+        // DOM Elements
+        const matchesContainer = document.getElementById('matchesContainer');
+        const iplContainer = document.getElementById('iplContainer');
+        const countdownElement = document.getElementById('countdown');
+        const manualRefreshBtn = document.getElementById('manualRefresh');
+        const apiStatusElement = document.getElementById('apiStatus');
+        const apiHitsElement = document.getElementById('apiHits');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchData();
+            setupAutoRefresh();
+            
+            // Manual refresh button
+            manualRefreshBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                manualRefresh();
+            });
+        });
+
+        // Fetch data from CricAPI
+        async function fetchData() {
+            if (isRefreshing) return;
+            isRefreshing = true;
+            apiStatusElement.textContent = "Loading...";
+            
+            try {
+                const response = await fetch(`https://api.cricapi.com/v1/cricScore?apikey=${API_KEY}`);
+                const data = await response.json();
+                
+                if (data.status !== "success") {
+                    throw new Error(data.reason || "API request failed");
+                }
+                
+                // Update API hits counter
+                if (data.info) {
+                    apiHitsElement.textContent = data.info.hitsUsed;
+                }
+                
+                // Process and render matches
+                renderMatches(data.data);
+                
+                // Filter and render IPL matches
+                const iplMatches = data.data.filter(match => 
+                    match.series.includes('Indian Premier League') || 
+                    match.series.includes('IPL')
+                );
+                renderIplData(iplMatches);
+                
+                // Add visual feedback for refresh
+                matchesContainer.classList.add('blink');
+                setTimeout(() => {
+                    matchesContainer.classList.remove('blink');
+                }, 1000);
+                
+                apiStatusElement.textContent = "Last updated: " + new Date().toLocaleTimeString();
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                matchesContainer.innerHTML = `
+                    <div class="match-card">
+                        <div class="teams">
+                            <p>Error loading matches: ${error.message}</p>
+                        </div>
+                    </div>
+                `;
+                apiStatusElement.textContent = "Error: " + error.message;
+            } finally {
+                isRefreshing = false;
+            }
+        }
+
+        // Setup auto-refresh
+        function setupAutoRefresh() {
+            clearInterval(refreshTimer);
+            clearInterval(countdownTimer);
+            
+            let secondsLeft = REFRESH_INTERVAL / 1000;
+            countdownElement.textContent = secondsLeft;
+            
+            // Update countdown every second
+            countdownTimer = setInterval(() => {
+                secondsLeft--;
+                countdownElement.textContent = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    secondsLeft = REFRESH_INTERVAL / 1000;
+                }
+            }, 1000);
+            
+            // Refresh data at interval
+            refreshTimer = setInterval(() => {
+                fetchData();
+            }, REFRESH_INTERVAL);
+        }
+
+        // Manual refresh
+        function manualRefresh() {
+            clearInterval(refreshTimer);
+            clearInterval(countdownTimer);
+            
+            fetchData();
+            setupAutoRefresh();
+        }
+
+        // Render matches
+        function renderMatches(matches) {
+            if (!matches || matches.length === 0) {
+                matchesContainer.innerHTML = `
+                    <div class="match-card">
+                        <div class="teams">
+                            <p>No matches currently</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort matches - live ones first, then upcoming, then completed
+            matches.sort((a, b) => {
+                if (a.ms === "live") return -1;
+                if (b.ms === "live") return 1;
+                if (a.ms === "fixture" && b.ms === "fixture") return new Date(a.dateTimeGMT) - new Date(b.dateTimeGMT);
+                if (a.ms === "fixture") return -1;
+                if (b.ms === "fixture") return 1;
+                return new Date(b.dateTimeGMT) - new Date(a.dateTimeGMT);
+            });
+            
+            let html = '';
+            matches.forEach(match => {
+                const team1 = match.t1 || "Team 1";
+                const team2 = match.t2 || "Team 2";
+                const team1Logo = match.t1img || "https://h.cricapi.com/img/icon512.png";
+                const team2Logo = match.t2img || "https://h.cricapi.com/img/icon512.png";
+                
+                // Determine status and status class
+                let statusClass = "";
+                let status = match.status;
+                
+                if (match.ms === "live") {
+                    statusClass = "live-status";
+                    status = "LIVE";
+                } else if (match.ms === "fixture") {
+                    statusClass = "upcoming-status";
+                    status = new Date(match.dateTimeGMT).toLocaleString();
+                } else if (match.ms === "result") {
+                    statusClass = "completed-status";
+                }
+                
+                // Format scores
+                let scoresHtml = '';
+                if (match.t1s && match.t2s) {
+                    scoresHtml = `
+                        <p>${team1}: ${match.t1s}</p>
+                        <p>${team2}: ${match.t2s}</p>
+                    `;
+                } else if (match.t1s) {
+                    scoresHtml = `<p>${team1}: ${match.t1s}</p>`;
+                } else if (match.t2s) {
+                    scoresHtml = `<p>${team2}: ${match.t2s}</p>`;
+                } else {
+                    scoresHtml = `<p>${match.ms === "fixture" ? 'Match starts at ' + new Date(match.dateTimeGMT).toLocaleTimeString() : 'Score not available'}</p>`;
+                }
+                
+                html += `
+                    <div class="match-card">
+                        <div class="teams">
+                            <div class="team-info">
+                                <img src="${team1Logo}" alt="${team1}" class="team-logo">
+                                <span>${team1}</span>
+                            </div>
+                            <div class="team-info">
+                                <img src="${team2Logo}" alt="${team2}" class="team-logo">
+                                <span>${team2}</span>
+                            </div>
+                            <small>${match.venue || match.series} • ${match.matchType.toUpperCase()}</small>
+                        </div>
+                        <div class="score">
+                            ${scoresHtml}
+                        </div>
+                        <div class="status ${statusClass}">${status}</div>
+                    </div>
+                `;
+            });
+            
+            matchesContainer.innerHTML = html;
+        }
+
+        // Render IPL data
+        function renderIplData(iplMatches) {
+            if (!iplMatches || iplMatches.length === 0) {
+                iplContainer.innerHTML = `
+                    <div class="ipl-highlight">
+                        <img src="https://via.placeholder.com/80/1e3a8a/ffffff?text=IPL" alt="IPL">
+                        <div>
+                            <h3>No IPL matches currently</h3>
+                            <p>Check back later for upcoming matches</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort IPL matches - live first, then upcoming, then completed
+            iplMatches.sort((a, b) => {
+                if (a.ms === "live") return -1;
+                if (b.ms === "live") return 1;
+                if (a.ms === "fixture" && b.ms === "fixture") return new Date(a.dateTimeGMT) - new Date(b.dateTimeGMT);
+                if (a.ms === "fixture") return -1;
+                if (b.ms === "fixture") return 1;
+                return new Date(b.dateTimeGMT) - new Date(a.dateTimeGMT);
+            });
+            
+            let html = '';
+            
+            // Today's IPL matches
+            const today = new Date().toISOString().split('T')[0];
+            const todaysMatches = iplMatches.filter(match => 
+                match.dateTimeGMT && match.dateTimeGMT.startsWith(today)
+            );
+            
+            if (todaysMatches.length > 0) {
+                todaysMatches.forEach(match => {
+                    const team1Logo = match.t1img || "https://h.cricapi.com/img/icon512.png";
+                    const team2Logo = match.t2img || "https://h.cricapi.com/img/icon512.png";
+                    
+                    let matchStatus = match.status;
+                    if (match.ms === "live") {
+                        matchStatus = "LIVE";
+                    } else if (match.ms === "fixture") {
+                        matchStatus = "Starts at " + new Date(match.dateTimeGMT).toLocaleTimeString();
+                    }
+                    
+                    html += `
+                        <div class="ipl-highlight">
+                            <img src="${team1Logo}" alt="${match.t1}">
+                            <div>
+                                <h3>${match.t1} vs ${match.t2}</h3>
+                                <p>${matchStatus}</p>
+                                ${match.t1s && match.t2s ? 
+                                    `<p>${match.t1}: ${match.t1s}</p>
+                                    <p>${match.t2}: ${match.t2s}</p>` : 
+                                    ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                // Show upcoming IPL matches if no matches today
+                const upcomingMatches = iplMatches.filter(match => 
+                    match.ms === "fixture" || match.ms === "live"
+                ).slice(0, 2);
+                
+                if (upcomingMatches.length > 0) {
+                    upcomingMatches.forEach(match => {
+                        html += `
+                            <div class="ipl-highlight">
+                                <img src="${match.t1img || "https://via.placeholder.com/80/1e3a8a/ffffff?text=IPL"}" alt="${match.t1}">
+                                <div>
+                                    <h3>${match.t1} vs ${match.t2}</h3>
+                                    <p>${new Date(match.dateTimeGMT).toLocaleDateString()} at ${new Date(match.dateTimeGMT).toLocaleTimeString()}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            }
+            
+            // Add recent completed IPL matches
+            const completedMatches = iplMatches.filter(match => 
+                match.ms === "result"
+            ).slice(0, 1);
+            
+            if (completedMatches.length > 0) {
+                completedMatches.forEach(match => {
+                    html += `
+                        <div class="ipl-highlight">
+                            <img src="${match.t1img || "https://via.placeholder.com/80/16a34a/ffffff?text=RESULT"}" alt="${match.t1}">
+                            <div>
+                                <h3>${match.t1} vs ${match.t2}</h3>
+                                <p>${match.status}</p>
+                                ${match.t1s && match.t2s ? 
+                                    `<p>${match.t1}: ${match.t1s}</p>
+                                    <p>${match.t2}: ${match.t2s}</p>` : 
+                                    ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Add IPL points table placeholder
+            html += `
+                <div class="ipl-highlight">
+                    <img src="https://via.placeholder.com/80/2563eb/ffffff?text=Table" alt="Points Table">
+                    <div>
+                        <h3>IPL 2025 Points Table</h3>
+                        <p>Check the latest standings</p>
+                    </div>
+                </div>
+            `;
+            
+            // Add orange cap placeholder
+            html += `
+                <div class="ipl-highlight">
+                    <img src="https://via.placeholder.com/80/dc2626/ffffff?text=Cap" alt="Orange Cap">
+                    <div>
+                        <h3>Orange Cap Holder</h3>
+                        <p>Leading run scorer of IPL 2025</p>
+                    </div>
+                </div>
+            `;
+            
+            iplContainer.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
